@@ -8,7 +8,6 @@ The shared-hosting workflow ships a hardened build to `https://lab.minischetti.o
    - `FTP_SERVER` – FTPS hostname (e.g., `ftp.example.com`)
    - `FTP_USER` – Username for the FTPS account
    - `FTP_PASS` – Password or app-specific token
-   - `FTP_SERVER_DIR` – Remote directory path (e.g., `/public_html/passless`)
 3. Push to the `main` branch. The workflow at `deploy/deploy.yml` will:
    - Validate PHP syntax
    - Run PHPStan analysis

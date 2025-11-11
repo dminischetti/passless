@@ -6,9 +6,9 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./:/var/www/html
+      - ./htdocs:/var/www/html
     environment:
-      APACHE_DOCUMENT_ROOT: /var/www/html/public
+      APACHE_DOCUMENT_ROOT: /var/www/html
       APP_ENV: development
       APP_URL: http://localhost:8080
       DB_DRIVER: mysql
@@ -20,6 +20,7 @@ services:
       SESSION_COOKIE_SECURE: '0'
     depends_on:
       - db
+
   db:
     image: mysql:8.0
     container_name: passless_db
@@ -32,5 +33,6 @@ services:
       - "33060:3306"
     volumes:
       - passless_db_data:/var/lib/mysql
+
 volumes:
   passless_db_data:

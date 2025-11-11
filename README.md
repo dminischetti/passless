@@ -195,14 +195,22 @@ These refinements are omitted here to keep the project framework-free and focuse
 ## Project Structure
 ```
 /passless
-├── public/            # Web entrypoints, assets, and .htaccess
-├── lib/               # Autoloaded services (security, mail, support)
-├── database/          # MySQL schema
-├── deploy/            # GitHub Actions workflow and maintenance scripts
-├── docs/              # Architecture, deployment, threat model, reference docs
-├── tests/             # Unit and integration coverage
-├── tools/             # Load-test harness and static-analysis bootstrap
-└── docker-compose.yml # Optional local stack
+├── htdocs/                # Web root (only this folder is deployed)
+│   ├── index.php          # Public entrypoint
+│   ├── app.php            # Authenticated dashboard
+│   ├── admin.php          # Security & audit console
+│   ├── assets/            # CSS, images, client assets
+│   ├── auth/              # Magic-link handlers (request / verify / revoke / logout)
+│   ├── lib/               # Autoloaded core services (security, mail, rate limiting, tokens)
+│   ├── database/          # MySQL schema + maintenance scripts
+│   ├── deploy/            # Cleanup & automation tasks for production
+│   └── .htaccess          # Security headers + rewrite rules
+│
+├── tests/                 # Unit + integration test suite (SQLite fixtures)
+├── tools/                 # Load-test harness + static analysis bootstrap
+├── docs/                  # Architecture, deployment, threat model, reference docs
+├── docker-compose.yml     # Optional local dev stack (PHP 8 + MySQL + Mailpit)
+└── .env.example           # Configuration template for real deployments
 ```
 
 ## Troubleshooting
