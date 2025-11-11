@@ -16,22 +16,18 @@ jobs:
       - name: Validate PHP syntax
         run: find . -name "*.php" -print0 | xargs -0 -n1 php -l
 
-      - name: Run project test suite
+      - name: Run test suite
         run: php tests/run.php
 
-      - name: Build deployment artifact
+      - name: Build deployment artifact (only public + lib + database)
         run: |
           rm -rf build
           mkdir -p build/passless
           rsync -av --delete \
-            --exclude='.git/' \
-            --exclude='.github/' \
-            --exclude='tests/' \
-            --exclude='docs/' \
-            --exclude='docker-compose.yml' \
-            --exclude='phpstan.neon*' \
-            --exclude='tools/' \
-            ./ build/passless/
+            public/ build/passless/public/ \
+            lib/ build/passless/lib/ \
+            database/ build/passless/database/ \
+            .env.example build/passless/.env.example
 
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -41,14 +37,6 @@ jobs:
           password: ${{ secrets.FTP_PASS }}
           protocol: ftps
           port: 21
-          local-dir: build/passless/
+          local-dir: build/passless/public
           server-dir: ${{ secrets.FTP_SERVER_DIR }}
-          exclude: |
-            **/.git*
-            **/.github*
-            **/tests/**
-            **/docs/**
-            **/deploy/**
-            **/tools/**
-            **/docker-compose.yml
-            **/phpstan.neon*
+
