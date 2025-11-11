@@ -50,7 +50,7 @@ jobs:
           password: ${{ secrets.FTP_PASS }}
           protocol: ftps
           port: 21
-          local-dir: build/passless
+          local-dir: build/passless/
           server-dir: ${{ secrets.FTP_SERVER_SECURE_DIR }}
           exclude: |
             public/**
