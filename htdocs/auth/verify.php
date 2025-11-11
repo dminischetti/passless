@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require __DIR__ . '/../../lib/bootstrap.php';
+require __DIR__ . '/../lib/bootstrap.php';
 
 use Passless\DB\Connector;
 use Passless\Mail\Mailer;
@@ -117,9 +117,9 @@ $details = $result->details() ?? [];
 $userId = $result->userId();
 
 if ($userId !== null) {
-$lockThreshold = (int) passless_env('ACCOUNT_LOCK_THRESHOLD', '5');
-$lockWindow = (int) passless_env('ACCOUNT_LOCK_WINDOW', '900');
-$lockDuration = (int) passless_env('ACCOUNT_LOCK_DURATION', '900');
+    $lockThreshold = (int) passless_env('ACCOUNT_LOCK_THRESHOLD', '5');
+    $lockWindow = (int) passless_env('ACCOUNT_LOCK_WINDOW', '900');
+    $lockDuration = (int) passless_env('ACCOUNT_LOCK_DURATION', '900');
 
     $failLimiter = RateLimiter::hit('verify_fail_user', (string) $userId, $lockThreshold, $lockWindow);
     if ($failLimiter->limited()) {

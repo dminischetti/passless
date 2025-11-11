@@ -102,33 +102,29 @@ require __DIR__ . '/../lib/DB/Connector.php';
 
 Connector::setConnection($pdo);
 
-require __DIR__ . '/../lib/bootstrap.php';
+require __DIR__ . '/lib/bootstrap.php';
 Connector::setConnection($pdo);
 
 $GLOBALS['TESTS'] = [];
 
-function register_test(string $name, callable $test): void
-{
+function register_test(string $name, callable $test): void {
     $GLOBALS['TESTS'][] = [$name, $test];
 }
 
-function assertTrue(bool $condition, string $message = ''): void
-{
+function assertTrue(bool $condition, string $message = ''): void {
     if (!$condition) {
         throw new RuntimeException($message !== '' ? $message : 'Failed asserting that condition is true.');
     }
 }
 
-function assertEquals(mixed $expected, mixed $actual, string $message = ''): void
-{
+function assertEquals(mixed $expected, mixed $actual, string $message = ''): void {
     if ($expected != $actual) {
         $default = sprintf('Failed asserting that %s matches expected %s.', var_export($actual, true), var_export($expected, true));
         throw new RuntimeException($message !== '' ? $message : $default);
     }
 }
 
-function passless_test_reset(): void
-{
+function passless_test_reset(): void {
     $pdo = Connector::connection();
     foreach (['login_tokens', 'sessions', 'rate_limits', 'audit_logs', 'security_events', 'geo_cache', 'users'] as $table) {
         $pdo->exec('DELETE FROM ' . $table);

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require __DIR__ . '/../lib/bootstrap.php';
+require __DIR__ . '/lib/bootstrap.php';
 
 use Passless\DB\Connector;
 use Passless\Support\Log;
