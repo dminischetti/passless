@@ -37,7 +37,7 @@ if ($resendAvailableAt !== null) {
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Passless &mdash; Passwordless Authentication Demo</title>
-    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="assets/style.css">
 </head>
 
 <body>
@@ -59,7 +59,7 @@ if ($resendAvailableAt !== null) {
                 <h2>Welcome back</h2>
                 <p>You are signed in as <strong><?= htmlspecialchars($user['email'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></strong>.</p>
                 <p class="muted">Session issued at <?= htmlspecialchars($session->issuedAt()->format('Y-m-d H:i:s'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?> UTC.</p>
-                <form method="post" action="/auth/logout.php">
+                <form method="post" action="auth/logout.php">
                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>">
                     <button type="submit" class="btn">Log out</button>
                 </form>
@@ -68,7 +68,7 @@ if ($resendAvailableAt !== null) {
             <section class="card">
                 <h2>Email login</h2>
                 <p>Enter your email address and we will send you a secure magic link.</p>
-                <form method="post" action="/auth/request.php" class="form-stack">
+                <form method="post" action="auth/request.php" class="form-stack">
                     <label for="email">Email address</label>
                     <input type="email" name="email" id="email" placeholder="you@example.com" required>
                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>">
