@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Passless magic link demo storyboard</title>
+  <desc id="desc">A three-panel storyboard illustrating the Passless login journey.</desc>
+  <style>
+    .panel { fill: #0f172a; stroke: #1e293b; stroke-width: 3; rx: 18; ry: 18; }
+    text { font-family: 'Inter', 'Segoe UI', sans-serif; }
+    .panel-title { font-size: 26px; font-weight: 700; fill: #38bdf8; }
+    .panel-body { font-size: 18px; fill: #e2e8f0; }
+    .badge { fill: #38bdf8; rx: 10; ry: 10; }
+    .badge-text { font-size: 18px; font-weight: 600; fill: #0f172a; }
+  </style>
+  <rect width="960" height="540" fill="#020617"/>
+  <g transform="translate(40,60)">
+    <rect class="panel" width="280" height="420"/>
+    <rect class="badge" x="16" y="16" width="90" height="32"/>
+    <text class="badge-text" x="32" y="38">Step 1</text>
+    <text class="panel-title" x="32" y="90">Request</text>
+    <text class="panel-body" x="32" y="130">• User enters email</text>
+    <text class="panel-body" x="32" y="160">• Dual rate limits check</text>
+    <text class="panel-body" x="32" y="190">• CAPTCHA if suspicious</text>
+    <text class="panel-body" x="32" y="240">Back-end:</text>
+    <text class="panel-body" x="52" y="270">- Token fingerprinted</text>
+    <text class="panel-body" x="52" y="300">- Audit + security logs</text>
+    <text class="panel-body" x="52" y="330">- Email dispatched</text>
+  </g>
+  <g transform="translate(340,60)">
+    <rect class="panel" width="280" height="420"/>
+    <rect class="badge" x="16" y="16" width="90" height="32"/>
+    <text class="badge-text" x="32" y="38">Step 2</text>
+    <text class="panel-title" x="32" y="90">Inbox</text>
+    <text class="panel-body" x="32" y="130">• Magic link arrives</text>
+    <text class="panel-body" x="32" y="160">• TTL 15 minutes</text>
+    <text class="panel-body" x="32" y="190">• One-click verification</text>
+    <text class="panel-body" x="32" y="240">Security notes:</text>
+    <text class="panel-body" x="52" y="270">- Link uses selector + token</text>
+    <text class="panel-body" x="52" y="300">- Token hashed at rest</text>
+    <text class="panel-body" x="52" y="330">- Fingerprint required</text>
+  </g>
+  <g transform="translate(640,60)">
+    <rect class="panel" width="280" height="420"/>
+    <rect class="badge" x="16" y="16" width="90" height="32"/>
+    <text class="badge-text" x="32" y="38">Step 3</text>
+    <text class="panel-title" x="32" y="90">Access</text>
+    <text class="panel-body" x="32" y="130">• Verification succeeds</text>
+    <text class="panel-body" x="32" y="160">• Session issued + logged</text>
+    <text class="panel-body" x="32" y="190">• Dashboard shows devices</text>
+    <text class="panel-body" x="32" y="240">Controls:</text>
+    <text class="panel-body" x="52" y="270">- Revoke other sessions</text>
+    <text class="panel-body" x="52" y="300">- View audit timeline</text>
+    <text class="panel-body" x="52" y="330">- Trigger logout</text>
+  </g>
+</svg>

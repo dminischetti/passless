@@ -1,0 +1,36 @@
+version: '3.9'
+services:
+  app:
+    image: php:8.2-apache
+    container_name: passless_app
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+    environment:
+      APACHE_DOCUMENT_ROOT: /var/www/html/public
+      APP_ENV: development
+      APP_URL: http://localhost:8080
+      DB_DRIVER: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: passless
+      DB_USER: passless
+      DB_PASS: passless
+      SESSION_COOKIE_SECURE: '0'
+    depends_on:
+      - db
+  db:
+    image: mysql:8.0
+    container_name: passless_db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: passless
+      MYSQL_USER: passless
+      MYSQL_PASSWORD: passless
+    ports:
+      - "33060:3306"
+    volumes:
+      - passless_db_data:/var/lib/mysql
+volumes:
+  passless_db_data:

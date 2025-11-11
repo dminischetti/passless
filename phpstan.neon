@@ -1,0 +1,12 @@
+parameters:
+    level: 7
+    paths:
+        - lib
+        - auth
+        - index.php
+        - app.php
+        - admin.php
+    bootstrapFiles:
+        - tools/phpstan/bootstrap.php
+    checkMissingIterableValueType: true
+    checkGenericClassInNonGenericObjectType: true

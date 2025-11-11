@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Passless admin dashboard mock</title>
+  <desc id="desc">Schematic representation of the Passless admin dashboard layout and metrics.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e3a8a"/>
+    </linearGradient>
+    <style>
+      text { font-family: 'Inter', 'Segoe UI', sans-serif; fill: #e2e8f0; }
+      .card { fill: #1e293b; stroke: #334155; stroke-width: 2; rx: 12; ry: 12; }
+      .chip { fill: #0ea5e9; stroke: none; rx: 6; ry: 6; }
+      .chip-text { font-size: 18px; font-weight: 600; fill: #0f172a; }
+      .section-title { font-size: 24px; font-weight: 600; }
+      .metric-value { font-size: 36px; font-weight: 700; }
+      .metric-label { font-size: 16px; fill: #94a3b8; }
+    </style>
+  </defs>
+  <rect width="960" height="540" fill="url(#bg)"/>
+  <text x="60" y="70" font-size="44" font-weight="700">Passless Admin Console</text>
+  <rect class="chip" x="60" y="90" width="210" height="36"/>
+  <text class="chip-text" x="85" y="115">Security Operations</text>
+
+  <rect class="card" x="60" y="150" width="250" height="150"/>
+  <text class="metric-value" x="90" y="210">128</text>
+  <text class="metric-label" x="90" y="240">Rate-limit events</text>
+
+  <rect class="card" x="340" y="150" width="250" height="150"/>
+  <text class="metric-value" x="370" y="210">42</text>
+  <text class="metric-label" x="370" y="240">Active sessions</text>
+
+  <rect class="card" x="620" y="150" width="250" height="150"/>
+  <text class="metric-value" x="650" y="210">7</text>
+  <text class="metric-label" x="650" y="240">Lockouts (24h)</text>
+
+  <rect class="card" x="60" y="330" width="380" height="150"/>
+  <text class="section-title" x="90" y="370">Recent security events</text>
+  <text x="90" y="400" font-size="18">• 2024-04-18 14:36 UTC — IP 203.0.113.9 triggered verify lockout</text>
+  <text x="90" y="430" font-size="18">• 2024-04-18 14:02 UTC — New device trusted for dominic@example.com</text>
+  <text x="90" y="460" font-size="18">• 2024-04-18 13:58 UTC — GeoIP alert: login from Berlin, DE</text>
+
+  <rect class="card" x="470" y="330" width="400" height="150"/>
+  <text class="section-title" x="500" y="370">Top IPs (24h)</text>
+  <text x="500" y="405" font-size="18">1. 198.51.100.22 — 34 attempts — CAPTCHA required</text>
+  <text x="500" y="435" font-size="18">2. 203.0.113.14 — 17 attempts — verified</text>
+  <text x="500" y="465" font-size="18">3. 192.0.2.4 — 11 attempts — pending review</text>
+</svg>
