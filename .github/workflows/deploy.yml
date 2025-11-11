@@ -22,14 +22,16 @@ jobs:
       - name: Build deployment artifact (only public + lib + database)
         run: |
           rm -rf build
-          mkdir -p build/passless
-          rsync -av --delete \
-            public/ build/passless/public/ \
-            lib/ build/passless/lib/ \
-            database/ build/passless/database/ \
-            .env.example build/passless/.env.example
+          mkdir -p build/passless/public
+          mkdir -p build/passless/lib
+          mkdir -p build/passless/database
 
-      - name: Deploy via FTP
+          rsync -av public/ build/passless/public/
+          rsync -av lib/ build/passless/lib/
+          rsync -av database/ build/passless/database/
+          cp .env.example build/passless/.env.example
+
+      - name: Deploy /public (web root)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
@@ -38,5 +40,17 @@ jobs:
           protocol: ftps
           port: 21
           local-dir: build/passless/public
-          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          server-dir: ${{ secrets.FTP_SERVER_PUBLIC_DIR }}
 
+      - name: Deploy /lib + /database (non webroot)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          protocol: ftps
+          port: 21
+          local-dir: build/passless
+          server-dir: ${{ secrets.FTP_SERVER_SECURE_DIR }}
+          exclude: |
+            public/**
