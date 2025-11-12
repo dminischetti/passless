@@ -17,9 +17,9 @@ Ensure `allow_url_fopen` is enabled and that `session.save_handler` can be overr
 
 ## Database Setup
 1. Create an empty MySQL database and user. Grant the user `SELECT`, `INSERT`, `UPDATE`, and `DELETE` privileges.
-2. Import the schema from `database/install.sql`:
+2. Import the schema from `htdocs/database/install.sql`:
    ```bash
-   mysql -u <user> -p <database> < database/install.sql
+   mysql -u <user> -p <database> < htdocs/database/install.sql
    ```
 3. Verify that the following tables exist: `users`, `login_tokens`, `sessions`, `rate_limits`, `audit_logs`, `security_events`, and `geo_cache`.
 
@@ -31,7 +31,7 @@ Ensure `allow_url_fopen` is enabled and that `session.save_handler` can be overr
    - `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`: Database connection credentials.
    - `MAIL_PROVIDER`, `MAIL_FROM`, `SENDGRID_API_KEY` *or* the `MAILGUN_*` trio: Outbound email settings.
 3. Leave every other variable commented out unless you need to override defaults. Useful overrides include session lifetimes, rate limits, CAPTCHA thresholds, account-lock policies, optional GeoIP lookups, and `ADMIN_EMAIL`.
-4. Configure your hosting document root to point at the `public/` directory so that only web entrypoints are exposed. If you cannot change the document root, upload the contents of `public/` into the served directory and keep the rest of the project outside of web scope.
+4. Configure your hosting document root to point at the `htdocs/` directory so that only web entrypoints are exposed. If you cannot change the document root, upload the contents of `htdocs/` into the served directory and keep the rest of the project outside of web scope.
 
 ## Email Delivery
 Passless supports SendGrid and Mailgun APIs:
@@ -58,14 +58,14 @@ Additional safeguards:
 The authenticated dashboard (`/app.php`) shows devices, recent security events, and audit history. Users flagged via `ADMIN_EMAIL` gain access to `/admin.php`, which summarises recent audit entries, suspicious events, aggregated counts, and export links for SIEM ingestion. A storyboard of the console lives in `docs/images/admin-dashboard.svg` for easy sharing.
 
 ## Deployment
-- **Shared hosting / FTP**: Configure FTPS credentials as GitHub secrets (`FTP_SERVER`, `FTP_USER`, `FTP_PASS`, `FTP_SERVER_DIR`) and push to `main`. The workflow at `deploy/deploy.yml` lints, tests, packages, and deploys the project to `https://lab.minischetti.org/passless`.
+- **Shared hosting / FTP**: Configure FTPS credentials as GitHub secrets (`FTP_SERVER`, `FTP_USER`, `FTP_PASS`, `FTP_SERVER_DIR`) and push to `main`. The workflow at `.github/workflows/deploy.yml` lints, tests, packages, and deploys the project to `https://lab.minischetti.org/passless`.
 - **Docker Compose**: `docker compose up --build` starts PHP, MySQL, and Mailpit locally. Override configuration via `.env` or environment variables.
 - **Fly.io**: Use the reference manifest in `docs/DEPLOYMENT.md` to deploy a stateless PHP app container with managed MySQL services.
 - **Railway**: Provision the repo as a service, attach a MySQL plugin, and deploy using the Docker configuration referenced in `docs/DEPLOYMENT.md`.
-- **DigitalOcean App Platform**: Point to the GitHub repository, choose “PHP” as the buildpack, set the run command to `php -S 0.0.0.0:8080 -t public`, and supply the same environment variables.
+- **DigitalOcean App Platform**: Point to the GitHub repository, choose “PHP” as the buildpack, set the run command to `php -S 0.0.0.0:8080 -t htdocs`, and supply the same environment variables.
 
 ## Maintenance Tasks
-- Run `php deploy/cleanup.php` on a schedule to delete expired sessions, consumed tokens, and stale rate-limit entries.
+- Run `php htdocs/deploy/cleanup.php` on a schedule to delete expired sessions, consumed tokens, and stale rate-limit entries.
 - Execute `php tools/load_test.php` to capture benchmark numbers.
 - Tail JSON logs from your configured PHP error log for operational insight.
 

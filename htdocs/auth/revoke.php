@@ -19,23 +19,20 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
 if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
     usleep(random_int(50000, 150000));
     $session->flash('error', 'Invalid request token.');
-    header('Location: /app.php');
-    exit;
+    passless_redirect('app.php');
 }
 
 $targetId = (string) ($_POST['session_id'] ?? '');
 if ($targetId === '') {
     usleep(random_int(50000, 150000));
     $session->flash('error', 'Session identifier is required.');
-    header('Location: /app.php');
-    exit;
+    passless_redirect('app.php');
 }
 
 $currentUser = $session->currentUser();
 if ($currentUser === null) {
     $session->flash('error', 'Please sign in again.');
-    header('Location: /');
-    exit;
+    passless_redirect();
 }
 
 $revoked = $session->revokeSession($targetId);
@@ -49,5 +46,4 @@ if ($revoked) {
     $session->flash('error', 'Unable to revoke the selected session.');
 }
 
-header('Location: /app.php');
-exit;
+passless_redirect('app.php');

@@ -18,12 +18,12 @@ graph LR
 ```
 
 ## Key Components
-- **Controllers** (`public/index.php`, `public/auth/*`, `public/app.php`, `public/admin.php`) orchestrate requests and responses.
-- **Security Services** (`lib/Security/*`) encapsulate token creation, verification, CAPTCHA requirements, rate limiting, GeoIP lookups, and session policies.
-- **Persistence** (`lib/DB/Connector.php`, `database/install.sql`) provides PDO connectivity for MySQL in production and SQLite in automated tests.
+- **Controllers** (`htdocs/index.php`, `htdocs/auth/*`, `htdocs/app.php`, `htdocs/admin.php`) orchestrate requests and responses.
+- **Security Services** (`htdocs/lib/Security/*`) encapsulate token creation, verification, CAPTCHA requirements, rate limiting, GeoIP lookups, and session policies.
+- **Persistence** (`htdocs/lib/DB/Connector.php`, `htdocs/database/install.sql`) provides PDO connectivity for MySQL in production and SQLite in automated tests.
 - **Session Layer** (`DatabaseSessionHandler`, `SessionAuth`) persists sessions in MySQL with sliding expiration, optional absolute lifetimes, and revocation support.
-- **Logging** (`lib/Support/*`) records audit events, security signals, and operational logs.
-- **Infrastructure** (`deploy/deploy.yml`, `deploy/cleanup.php`, `docs/DEPLOYMENT.md`) automates analysis, testing, deployment, and housekeeping.
+- **Logging** (`htdocs/lib/Support/*`) records audit events, security signals, and operational logs.
+- **Infrastructure** (`.github/workflows/deploy.yml`, `htdocs/deploy/cleanup.php`, `docs/DEPLOYMENT.md`) automates analysis, testing, deployment, and housekeeping.
 
 ## Error Handling Strategy
 - **User-facing errors** stay generic to avoid account enumeration and timing leaks. Random jitter is introduced before returning failures.

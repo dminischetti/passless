@@ -11,8 +11,7 @@ use Passless\Security\SessionAuth;
 $session = SessionAuth::instance();
 $user = $session->currentUser();
 if ($user === null) {
-    header('Location: /');
-    exit;
+    passless_redirect();
 }
 
 if (!$session->isAdmin()) {
@@ -61,7 +60,7 @@ function passless_decode_context(?string $context): array {
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Passless &mdash; Security console</title>
-    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="<?= htmlspecialchars(passless_path('assets/style.css'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>">
 </head>
 
 <body>
@@ -72,8 +71,8 @@ function passless_decode_context(?string $context): array {
                 <p class="tagline">Monitor audit trails and suspicious activity.</p>
             </div>
             <nav class="header-nav">
-                <a class="btn" href="/app.php">Account</a>
-                <form method="post" action="/auth/logout.php" class="inline-form">
+                <a class="btn" href="<?= htmlspecialchars(passless_path('app.php'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>">Account</a>
+                <form method="post" action="<?= htmlspecialchars(passless_path('auth/logout.php'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" class="inline-form">
                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>">
                     <button type="submit" class="btn danger">Log out</button>
                 </form>

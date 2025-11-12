@@ -16,11 +16,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
 
 if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
     $session->flash('error', 'Invalid request.');
-    header('Location: /');
-    exit;
+    passless_redirect();
 }
 
 $session->logOut();
 $session->flash('success', 'You have been signed out.');
-header('Location: /');
-exit;
+passless_redirect();

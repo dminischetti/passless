@@ -40,4 +40,4 @@ The following modules power Passless' security model. Each API is intentionally 
 - Records session metadata (IP, user agent) for device awareness.
 - Garbage collection removes expired or revoked rows in a single query.
 
-For usage examples explore `public/auth/request.php`, `public/auth/verify.php`, and the integration tests in `tests/AuthFlowTest.php`.
+For usage examples explore `htdocs/auth/request.php`, `htdocs/auth/verify.php`, and the integration tests in `tests/AuthFlowTest.php`.

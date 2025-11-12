@@ -105,9 +105,111 @@ if (!function_exists('passless_root')) {
     }
 }
 
+if (!function_exists('passless_project_root')) {
+    function passless_project_root(): string
+    {
+        return $GLOBALS['PASSLESS_PROJECT_ROOT'] ?? passless_root();
+    }
+}
+
 $root = dirname(__DIR__);
+$projectRoot = dirname($root);
 $GLOBALS['PASSLESS_ROOT'] = $root;
-$GLOBALS['PASSLESS_ENV'] = passless_load_env($root . '/.env');
+$GLOBALS['PASSLESS_PROJECT_ROOT'] = $projectRoot;
+
+$envPath = $root . '/.env';
+if (!is_readable($envPath)) {
+    $envPath = $projectRoot . '/.env';
+}
+
+$GLOBALS['PASSLESS_ENV'] = passless_load_env($envPath);
+
+$configuredBaseUrl = rtrim((string) passless_env('APP_URL', ''), '/');
+$baseUrl = $configuredBaseUrl;
+if ($baseUrl === '') {
+    $scheme = 'http';
+    $https = $_SERVER['HTTPS'] ?? null;
+    if (is_string($https) && $https !== '' && strtolower($https) !== 'off') {
+        $scheme = 'https';
+    }
+
+    $host = $_SERVER['HTTP_HOST'] ?? '';
+    if ($host !== '') {
+        $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+        $scriptDir = $scriptName !== '' ? rtrim(str_replace('\\', '/', dirname($scriptName)), '/\\') : '';
+        $baseUrl = $scheme . '://' . $host;
+        if ($scriptDir !== '' && $scriptDir !== '.') {
+            $baseUrl .= '/' . ltrim($scriptDir, '/');
+        }
+        $baseUrl = rtrim($baseUrl, '/');
+    }
+}
+
+$basePath = '';
+if ($baseUrl !== '') {
+    $parsedPath = parse_url($baseUrl, PHP_URL_PATH);
+    if (is_string($parsedPath) && $parsedPath !== '') {
+        $basePath = '/' . trim($parsedPath, '/');
+    }
+}
+
+$GLOBALS['PASSLESS_BASE_URL'] = $baseUrl;
+$GLOBALS['PASSLESS_BASE_PATH'] = $basePath;
+
+if (!function_exists('passless_base_path')) {
+    function passless_base_path(): string
+    {
+        return $GLOBALS['PASSLESS_BASE_PATH'] ?? '';
+    }
+}
+
+if (!function_exists('passless_path')) {
+    function passless_path(string $relative = ''): string
+    {
+        $basePath = trim(passless_base_path(), '/');
+        $relative = ltrim($relative, '/');
+
+        $segments = [];
+        if ($basePath !== '') {
+            $segments[] = $basePath;
+        }
+        if ($relative !== '') {
+            $segments[] = $relative;
+        }
+
+        if (empty($segments)) {
+            return '/';
+        }
+
+        return '/' . implode('/', $segments);
+    }
+}
+
+if (!function_exists('passless_url')) {
+    function passless_url(string $relative = ''): string
+    {
+        $relative = ltrim($relative, '/');
+        $baseUrl = $GLOBALS['PASSLESS_BASE_URL'] ?? '';
+
+        if ($baseUrl !== '') {
+            $url = rtrim($baseUrl, '/');
+            if ($relative !== '') {
+                $url .= '/' . $relative;
+            }
+            return $url;
+        }
+
+        return passless_path($relative);
+    }
+}
+
+if (!function_exists('passless_redirect')) {
+    function passless_redirect(string $relative = ''): void
+    {
+        header('Location: ' . passless_path($relative));
+        exit;
+    }
+}
 
 date_default_timezone_set(passless_env('APP_TIMEZONE', 'UTC'));
 

@@ -22,8 +22,7 @@ $token = trim((string) ($_GET['token'] ?? ''));
 if ($selector === '' || $token === '') {
     usleep(random_int(400000, 800000));
     $session->flash('error', 'The magic link is invalid or incomplete.');
-    header('Location: /');
-    exit;
+    passless_redirect();
 }
 
 $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
@@ -36,8 +35,7 @@ if ($limiter->limited()) {
     $retry = gmdate('H:i:s \U\T\C', $limiter->retryAfter()->getTimestamp());
     SecurityEventLogger::record('verify.rate_limit', ['ip' => $ip, 'selector' => $selector, 'retry_at' => $retry]);
     $session->flash('error', 'Too many verification attempts. Try again at ' . $retry . '.');
-    header('Location: /');
-    exit;
+    passless_redirect();
 }
 
 $result = TokenService::verify($selector, $token, $ip, $userAgent);
@@ -52,23 +50,20 @@ if ($result->isSuccess()) {
     } catch (\Throwable $exception) {
         Log::error('Failed to create session during verification', ['error' => $exception->getMessage()]);
         $session->flash('error', 'Unable to sign you in. Please request a new link.');
-        header('Location: /');
-        exit;
+        passless_redirect();
     }
 
     if (!$user) {
         Log::warning('Verified token without matching user', ['user_id' => $userId]);
         $session->flash('error', 'Unable to sign you in. Please request a new link.');
-        header('Location: /');
-        exit;
+        passless_redirect();
     }
 
     if ($user['locked_until']) {
         $lockedUntil = new \DateTimeImmutable((string) $user['locked_until']);
         if ($lockedUntil > new \DateTimeImmutable('now')) {
             $session->flash('error', 'This account is temporarily locked.');
-            header('Location: /');
-            exit;
+            passless_redirect();
         }
     }
 
@@ -108,8 +103,7 @@ if ($result->isSuccess()) {
     AuditLogger::record('session.created', ['user_id' => (int) $user['id'], 'ip' => $ip]);
 
     $session->flash('success', 'You are now signed in.');
-    header('Location: /app.php');
-    exit;
+    passless_redirect('app.php');
 }
 
 usleep(random_int(400000, 800000));
@@ -165,5 +159,4 @@ switch ($result->status()) {
         break;
 }
 
-header('Location: /');
-exit;
+passless_redirect();

@@ -164,12 +164,7 @@ final class TokenService
 
     private static function buildLink(string $selector, string $token): string
     {
-        $base = rtrim((string) \passless_env('APP_URL', ''), '/');
-        if ($base === '') {
-            return '/auth/verify.php?selector=' . rawurlencode($selector) . '&token=' . rawurlencode($token);
-        }
-
-        return $base . '/auth/verify.php?selector=' . rawurlencode($selector) . '&token=' . rawurlencode($token);
+        return \passless_url('auth/verify.php?selector=' . rawurlencode($selector) . '&token=' . rawurlencode($token));
     }
 
     private static function fingerprintMaterial(string $ip, string $userAgent): string

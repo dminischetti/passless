@@ -26,16 +26,14 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
 if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
     usleep(random_int(50000, 150000));
     $session->flash('error', 'Invalid session, please try again.');
-    header('Location: /');
-    exit;
+    passless_redirect();
 }
 
 $email = strtolower(trim((string) ($_POST['email'] ?? '')));
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     usleep(random_int(50000, 150000));
     $session->flash('error', 'Please provide a valid email address.');
-    header('Location: /');
-    exit;
+    passless_redirect();
 }
 
 $scope = 'request:' . hash('sha256', $email);
@@ -45,8 +43,7 @@ if (Captcha::isRequired($scope)) {
         usleep(random_int(50000, 150000));
         SecurityEventLogger::record('captcha.failed', ['email' => $email, 'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown']);
         $session->flash('error', 'Please complete the verification challenge.');
-        header('Location: /');
-        exit;
+        passless_redirect();
     }
 }
 
@@ -80,8 +77,7 @@ if ($emailLimiter->limited() || $ipLimiter->limited() || $comboLimiter->limited(
         'retry_at' => $retryAfter,
     ]);
     $session->flash('error', 'Too many requests. Try again at ' . $retryAfter . '.');
-    header('Location: /');
-    exit;
+    passless_redirect();
 }
 
 try {
@@ -110,8 +106,7 @@ try {
         $pdo->commit();
         SecurityEventLogger::record('account.locked_request', ['email' => $email, 'ip' => $ip]);
         $session->flash('error', 'We cannot send a link right now. Please contact support.');
-        header('Location: /');
-        exit;
+        passless_redirect();
     }
 
     $pdo->commit();
@@ -121,8 +116,7 @@ try {
     }
     Log::error('Failed to prepare magic link', ['error' => $exception->getMessage()]);
     $session->flash('error', 'Something went wrong. Please try again later.');
-    header('Location: /');
-    exit;
+    passless_redirect();
 }
 
 $magicLink = TokenService::createForUser($userId, $email, $ip, $_SERVER['HTTP_USER_AGENT'] ?? '');
@@ -138,8 +132,7 @@ try {
     ]);
     Log::error('Magic link delivery failed', ['email' => $email, 'error' => $exception->getMessage()]);
     $session->flash('error', 'We could not send the magic link right now. Please try again later.');
-    header('Location: /');
-    exit;
+    passless_redirect();
 }
 AuditLogger::record('magic_link.dispatched', ['user_id' => $userId, 'email' => $email, 'ip' => $ip]);
 Log::info('Magic link generated', ['user' => $email, 'ip' => $ip]);
@@ -161,5 +154,4 @@ $retryWindow = max(
 $_SESSION['resend_available_at'] = $retryWindow;
 
 $session->flash('success', 'Magic link sent. Please check your inbox.');
-header('Location: /');
-exit;
+passless_redirect();

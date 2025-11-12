@@ -94,15 +94,18 @@ $_SERVER = array_merge($_SERVER, [
     'HTTP_USER_AGENT' => 'PHPUnit/Passless',
 ]);
 
-require __DIR__ . '/../lib/autoload.php';
-require __DIR__ . '/../lib/Support/Log.php';
-require __DIR__ . '/../lib/Support/AuditLogger.php';
-require __DIR__ . '/../lib/Support/SecurityEventLogger.php';
-require __DIR__ . '/../lib/DB/Connector.php';
+$projectRoot = dirname(__DIR__);
+$libPath = $projectRoot . '/htdocs/lib';
+
+require $libPath . '/autoload.php';
+require $libPath . '/Support/Log.php';
+require $libPath . '/Support/AuditLogger.php';
+require $libPath . '/Support/SecurityEventLogger.php';
+require $libPath . '/DB/Connector.php';
 
 Connector::setConnection($pdo);
 
-require __DIR__ . '/lib/bootstrap.php';
+require $libPath . '/bootstrap.php';
 Connector::setConnection($pdo);
 
 $GLOBALS['TESTS'] = [];

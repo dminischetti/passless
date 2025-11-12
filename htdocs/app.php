@@ -12,8 +12,7 @@ $session = SessionAuth::instance();
 $user = $session->currentUser();
 
 if ($user === null) {
-    header('Location: /');
-    exit;
+    passless_redirect();
 }
 
 $csrfToken = Csrf::token();
@@ -83,7 +82,7 @@ function passless_format_datetime(?string $value): string {
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Passless &mdash; Account</title>
-    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="<?= htmlspecialchars(passless_path('assets/style.css'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>">
 </head>
 
 <body>
@@ -95,9 +94,9 @@ function passless_format_datetime(?string $value): string {
             </div>
             <nav class="header-nav">
                 <?php if ($session->isAdmin()): ?>
-                    <a class="btn" href="/admin.php">Security console</a>
+                    <a class="btn" href="<?= htmlspecialchars(passless_path('admin.php'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>">Security console</a>
                 <?php endif; ?>
-                <a class="btn" href="/">Request link</a>
+                <a class="btn" href="<?= htmlspecialchars(passless_path(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>">Request link</a>
             </nav>
         </div>
     </header>
@@ -113,7 +112,7 @@ function passless_format_datetime(?string $value): string {
             <p><strong><?= htmlspecialchars($user['email'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></strong></p>
             <p class="muted">Session started <?= htmlspecialchars($session->issuedAt()->format('Y-m-d H:i:s \U\T\C'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>.</p>
             <div class="actions">
-                <form method="post" action="/auth/logout.php" class="inline-form">
+                <form method="post" action="<?= htmlspecialchars(passless_path('auth/logout.php'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" class="inline-form">
                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>">
                     <button type="submit" class="btn danger">Log out</button>
                 </form>
@@ -157,7 +156,7 @@ function passless_format_datetime(?string $value): string {
                                         <?php if ($isCurrent): ?>
                                             <span class="muted">Current session</span>
                                         <?php else: ?>
-                                            <form method="post" action="/auth/revoke.php" class="inline-form">
+                                            <form method="post" action="<?= htmlspecialchars(passless_path('auth/revoke.php'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" class="inline-form">
                                                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>">
                                                 <input type="hidden" name="session_id" value="<?= htmlspecialchars((string) $active['id'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>">
                                                 <button type="submit" class="btn danger">Revoke</button>

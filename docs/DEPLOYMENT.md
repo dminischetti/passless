@@ -8,11 +8,11 @@ The shared-hosting workflow ships a hardened build to `https://lab.minischetti.o
    - `FTP_SERVER` – FTPS hostname (e.g., `ftp.example.com`)
    - `FTP_USER` – Username for the FTPS account
    - `FTP_PASS` – Password or app-specific token
-3. Push to the `main` branch. The workflow at `deploy/deploy.yml` will:
+3. Push to the `main` branch. The workflow at `.github/workflows/deploy.yml` will:
    - Validate PHP syntax
    - Run PHPStan analysis
    - Execute the custom test suite
-   - Deploy the contents of `public/` to your server over FTPS
+   - Deploy the contents of `htdocs/` to your server over FTPS
 
 > **Tip:** If your host supports SFTP, set `protocol: sftp` in the workflow for stronger transport security.
 
@@ -63,19 +63,19 @@ docker compose up --build
    - `APP_URL=https://<your-subdomain>.up.railway.app`
    - `APP_ENV=production`
    - Email credentials via Railway variables
-4. Set the start command to `php -S 0.0.0.0:8080 -t public`.
+4. Set the start command to `php -S 0.0.0.0:8080 -t htdocs`.
 5. Add a health check pointing at `/auth/request.php`.
 
 ## DigitalOcean App Platform
 1. Create an app, link this repository, and choose “PHP” as the runtime.
-2. Set build command to `composer install --no-dev` (noop but required), run command to `php -S 0.0.0.0:8080 -t public`.
+2. Set build command to `composer install --no-dev` (noop but required), run command to `php -S 0.0.0.0:8080 -t htdocs`.
 3. Attach a managed MySQL database or supply external credentials.
 4. Add environment variables for `APP_ENV`, `APP_URL`, `DB_*`, and `MAIL_*`.
 5. Configure an automatic deployment on `main` to mirror the GitHub workflow.
 
 ## Observability Hooks
 - Forward structured logs to a collector (Datadog, Grafana Loki, ELK).
-- Ship security events via webhook by extending `lib/Support/SecurityEventLogger.php`.
+- Ship security events via webhook by extending `htdocs/lib/Support/SecurityEventLogger.php`.
 - Add application metrics or traces if your platform supports Prometheus or OpenTelemetry sidecars.
 
 ## Scaling Tips

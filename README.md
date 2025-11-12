@@ -70,10 +70,10 @@ This project demonstrates:
 3. Provision a MySQL database and user with UTF8MB4 support.
 4. Import the schema:
    ```bash
-   mysql -u <user> -p <database> < database/install.sql
+   mysql -u <user> -p <database> < htdocs/database/install.sql
    ```
 5. Enable PHP extensions: `pdo_mysql`, `openssl`, `mbstring`, `curl`, `json`, `session` (and `pdo_sqlite` for tests).
-6. Point your document root at `public/`. If that is not possible, upload only `public/` to the served directory.
+6. Point your document root at `htdocs/`. If that is not possible, upload only `htdocs/` to the served directory.
 7. Optional local stack:
    ```bash
    docker compose up --build
@@ -94,7 +94,7 @@ All other keys in `.env.example` are optional overrides with safe defaults for s
 - **Verify the link:** `/auth/verify.php` enforces selector, token hash, fingerprint, rate limits, and account lockouts.
 - **Dashboard:** `/app.php` lists active sessions, recent security events, and revocation controls.
 - **Admin console:** `/admin.php` (granted via `ADMIN_EMAIL`) surfaces suspicious IPs, rate-limit hits, lockouts, and export options.
-- **Automation:** `php deploy/cleanup.php` prunes expired tokens, sessions, and rate-limit entries. `php tools/load_test.php` captures benchmark snapshots.
+- **Automation:** `php htdocs/deploy/cleanup.php` prunes expired tokens, sessions, and rate-limit entries. `php tools/load_test.php` captures benchmark snapshots.
 - **Quality gates:** `php tests/run.php` executes unit and integration tests; run PHPStan with `php phpstan.phar analyse --configuration=phpstan.neon`.
 
 ## Gallery
@@ -179,7 +179,7 @@ php tests/run.php
 ## Scalability & Limitations
 - Indexed tables: `login_tokens.expires_at`, `sessions.expires_at`, `audit_logs.created_at`, `security_events.created_at`.
 - Horizontal scaling requires either sticky sessions or continued reliance on database-backed sessions.
-- Cleanup tasks (tokens, sessions, rate limits) run via `deploy/cleanup.php`; schedule cron jobs or platform tasks.
+- Cleanup tasks (tokens, sessions, rate limits) run via `htdocs/deploy/cleanup.php`; schedule cron jobs or platform tasks.
 - Background GeoIP lookups are cached for seven days to minimise API usage.
 
 ## Production Considerations
